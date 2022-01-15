@@ -1,2 +1,2 @@
-# Programmers-Health
+# Smart Clock
 Setup a countdown for rest.
