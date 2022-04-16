@@ -23,8 +23,11 @@ class MainUI(QDialog):
         self.timer.timeout.connect(self.monitor)
         self.cnter.timeout.connect(self.update_countdown)
 
+        self.pauseAction = QAction("Start", self)
         self.exitAction = QAction("Exit", self)
+
         self.trayIconMenu = QMenu(self)
+        self.trayIconMenu.addAction(self.pauseAction)
         self.trayIconMenu.addAction(self.exitAction)
 
         self.trayIcon = QSystemTrayIcon(self)
@@ -33,6 +36,7 @@ class MainUI(QDialog):
         self.trayIcon.setToolTip('Smart Clock')
         self.trayIcon.show()
         self.exitAction.triggered.connect(self.exit_app)
+        self.pauseAction.triggered.connect(self.pause_clock)
         self.trayIcon.activated.connect(self.icon_clicked)
 
         self.UiALert = AlertUI(self.timer)
@@ -53,6 +57,7 @@ class MainUI(QDialog):
             self.btDo.setText('Start')
             self.timer.stop()
             self.cnter.stop()
+            self.pauseAction.setText('Restart')
         else:
             self.bStarted = True
             self.btDo.setText('Stop')
@@ -60,6 +65,10 @@ class MainUI(QDialog):
             iCountDown = iTime
             self.cnter.start(1000)
             self.lcdCountDown.display(iTime/1000)
+            self.pauseAction.setText('Stop')
+
+    def pause_clock(self):
+        self.run_stop()
 
     def update_countdown(self):
         global iCountDown
